@@ -75,44 +75,40 @@ Luật mới đã bổ sung vào `GUIDELINE_MINI.md` sau khi thống nhất:
 <!-- Viết một rule kiểm chứng được: điều kiện nhìn thấy/căn cứ vị trí → chọn v=1 hoặc v=0.
 Không chỉ ghi “cẩn thận hơn khi gán”. -->
 
--
-
 ## 4. Model
 
 <!-- Chép số từ outputs/eval_model.json sau Chặng 6. “Chênh” = sau fine-tune trừ baseline;
 đây là quan sát trên tập test, không phải chất lượng sản phẩm. -->
 
-| Chỉ số         | yolo26n-pose gốc | Sau fine-tune | Chênh |
-| -------------- | ---------------: | ------------: | ----: |
-| pose_mAP50     |                  |               |       |
-| pose_mAP50-95  |                  |               |       |
-| pose_precision |                  |               |       |
-| pose_recall    |                  |               |       |
-| box_mAP50-95   |                  |               |       |
+| Chỉ số         | yolo26n-pose gốc | Sau fine-tune |   Chênh |
+| -------------- | ---------------: | ------------: | ------: |
+| pose_mAP50     |           0.8450 |        0.8450 | +0.0000 |
+| pose_mAP50-95  |           0.6853 |        0.6908 | +0.0055 |
+| pose_precision |           0.9734 |        0.9792 | +0.0058 |
+| pose_recall    |           0.8462 |        0.8462 | +0.0000 |
+| box_mAP50-95   |           0.8119 |        0.8041 | -0.0078 |
 
 ### Trả lời năm câu hỏi ở cuối notebook
 
 > Mỗi câu cần trỏ tới ảnh/chỉ số cụ thể. Một con số thấp không tự chứng minh nhãn sai;
 > kiểm lại bằng bằng chứng thị giác và kết quả gold.
 
-1. `pose_mAP50-95` thay đổi bao nhiêu? Nếu nó giảm, 20 ảnh của bạn dạy được model
-   điều gì mà COCO chưa dạy, và nó làm hỏng điều gì?
+1. `pose_mAP50-95` tăng `0.0055`, từ `0.6853` lên `0.6908`; đây là mức tăng nhỏ trên tập test 10 ảnh. Hai mươi ảnh train giúp model thích nghi thêm với các tư thế, góc nhìn và quy tắc đặt keypoint/visibility của bộ ảnh này, nhưng chưa đủ để kết luận model tốt hơn nói chung; `box_mAP50-95` lại giảm `0.0078`, cho thấy phần tìm khung người không cải thiện sau fine-tune.
 
-2. `box_mAP` và `pose_mAP` chênh nhau bao nhiêu? Model tìm _người_ dễ hơn hay tìm
-   _khớp_ dễ hơn? Vì sao?
+2. Sau fine-tune, `box_mAP50-95 = 0.8041` và `pose_mAP50-95 = 0.6908`, chênh `0.1133`. Model tìm người dễ hơn tìm khớp: box chỉ cần xác định vùng người, còn pose phải đặt đúng 17 điểm, trong đó có các điểm nhỏ hoặc bị che như tai, mắt và cổ tay.
 
-3. Một ảnh test model đoán sai - gọi tên lỗi theo bốn loại của slide 43
-   (lệch nhẹ / đảo trái/phải / nhầm người / trượt hẳn):
+3. Chưa thể xác định ảnh test và loại lỗi từ các file hiện có. Notebook có cell dự đoán 10 ảnh test, nhưng workspace chưa có thư mục predictions hoặc ảnh kết quả để đối chiếu trực quan; không đủ bằng chứng để gọi là lệch nhẹ, đảo trái/phải, nhầm người hay trượt hẳn.
 
-4. Ảnh nào có OKS thấp nhất giữa nhãn của bạn và model? Ai đúng, và bạn dựa vào đâu?
+4. Chưa có bảng `OKS model vs nhãn của bạn` được lưu từ cell 6 của notebook, nên chưa thể xác định ảnh thấp nhất hoặc kết luận ai đúng. Cần chạy cell đối chiếu rồi xem ảnh gốc cùng pose của bạn và pose model dự đoán.
 
-5. Ảnh bạn gán tệ nhất có _cũng_ là ảnh model đoán tệ nhất không? Nếu có, điều đó
-   nói gì về bức ảnh đó?
+5. Kết quả gold cho biết trước rework, ca thấp nhất trong ba skeleton cần sửa là `train_01.jpg`, người #2, OKS `0.855`; nhưng chưa có bảng OKS model-vs-nhãn nên chưa thể biết đây có phải ảnh model đoán tệ nhất hay không. Vì vậy chưa thể kết luận ảnh đó khó với cả người gán và model chỉ từ kết quả gold.
 
 ## 5. Một rule evidence bạn đã dùng
 
 Chọn một keypoint trong ảnh core mà bạn phải quyết định giữa `v=1` và `v=0`. Nêu ảnh, người,
 khớp, bằng chứng nhìn thấy và lý do chọn trạng thái đó trong 3-5 câu.
+
+Ở ảnh `train_07`, người thứ 1, tôi chọn `right_ankle` là `v=0`. Phần cẳng chân đi xuống sát mép dưới ảnh nhưng bàn chân và vị trí cổ chân đã nằm ngoài khung, nên không còn bề mặt hoặc phần cơ thể liền kề đủ để đặt chấm chính xác. Đây là khớp thực sự ra ngoài mép ảnh chứ không phải bị vật che trong khung, vì vậy tôi không đặt chấm và dùng `v=0`.
 
 <!-- Cấu trúc gợi ý: (1) train_XX + người thứ mấy + keypoint; (2) căn cứ thị giác như phần cơ
 thể liền kề, trang phục hoặc vật che; (3) vì sao khớp còn trong khung (v=1) hay đã ra khỏi
