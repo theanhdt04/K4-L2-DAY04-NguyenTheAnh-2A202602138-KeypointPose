@@ -1,6 +1,6 @@
 # Báo cáo Ngày 4 - Keypoint & Pose
 
-Họ tên: Nguyễn Thế Anh Nhóm: **\_\_** Ngày: 16/09/2026
+Họ tên: **Nguyễn Thế Anh** Nhóm: **\_\_** Ngày: **16/09/2026**
 
 > Cách dùng: copy file này thành `reports/REPORT.md`. Điền bằng số liệu do công cụ sinh ra;
 > không tự ước lượng hoặc sửa số trong file JSON.
@@ -11,20 +11,20 @@ Họ tên: Nguyễn Thế Anh Nhóm: **\_\_** Ngày: 16/09/2026
 Số ảnh phải là 20; số skeleton là tổng số người trong 20 ảnh. Thời gian trung bình = tổng
 thời gian gán / 20. -->
 
-| Chỉ số                       |        Giá trị |
-| ---------------------------- | -------------: |
-| Số ảnh đã gán                |             20 |
-| Số skeleton                  |             29 |
-| v=2 / v=1 / v=0              | 331 / 134 / 28 |
-| Thời gian trung bình mỗi ảnh |  4,75 phút/ảnh |
+| Chỉ số                       |            Giá trị |
+| ---------------------------- | -----------------: |
+| Số ảnh đã gán                |                 20 |
+| Số skeleton                  |                 29 |
+| v=2 / v=1 / v=0              |     331 / 134 / 28 |
+| Thời gian trung bình mỗi ảnh | 4 phút 45 giây/ảnh |
 
 Ba khớp có `%v=1` cao nhất (chép từ `reports/visibility_report.md`):
 
-1. **left_ear (tai trái): 62%**
-2. **right_ear (tai phải): 52%**
-3. **left_eye (mắt trái): 38%**
+1. **left_ear – 62%**
+2. **right_ear – 52%**
+3. **left_eye – 38%** _(đồng hạng với `right_eye` – 38%)_
 
-Ba khớp này khá phù hợp với những vị trí khó gán vì vùng tai và mắt thường bị che hoặc khó quan sát rõ. Tuy nhiên, `%v=1` phản ánh mức độ bị che/khuất chứ không hoàn toàn đồng nghĩa với khó xác định vị trí giải phẫu. Ví dụ, cổ chân có 9 trường hợp `v=0` mỗi bên, cho thấy nhiều khớp chân không xuất hiện hoặc không xác định được; vì vậy tai/mắt là các khớp hay bị che hơn, còn cổ chân cần chú ý về khả năng xác định vị trí.
+Không hoàn toàn. Bảng đếm cao ở tai và mắt, nhưng lúc gán tôi thấy tai bị tóc hoặc vật che khó hơn vì không biết nên chọn `v=1` hay `v=2`. Ví dụ, ở `train_07`, người đứng giữa có khớp `left_hip` không nhìn thấy rõ nên tôi phải ước lượng vị trí theo phần cơ thể liền kề; hông khó vì phải đoán vị trí, còn tai khó vì phải chọn cờ.
 
 <!-- Trả lời 2–4 câu. Phân biệt “hay bị che” với “khó xác định vị trí giải phẫu”; nêu bằng
 chứng nhìn thấy thay vì chỉ nêu cảm giác. -->
@@ -48,9 +48,9 @@ lần sau rework. Đếm số phần tử trong từng danh sách lỗi, không 
 <!-- Mỗi dòng phải có: tên ảnh + người thứ mấy + keypoint + thao tác sửa. Không viết “đã sửa
 lại một số lỗi”. -->
 
-- `train_01.jpg` + người #2 + `right_wrist`: sửa lại keypoint `right_wrist` bị chấm nhầm sang cơ thể bên cạnh.
-- `train_04.jpg` + người #1 + `left_wrist`: sửa lại keypoint `left_wrist` bị chấm nhầm sang người bên cạnh.
-- `train_19.jpg` + người #2 + `right_wrist`: sửa lại keypoint `right_wrist` bị trượt hẳn khỏi vị trí khớp.
+- `train_01.jpg` + người #2 + `right_wrist`: kéo lại keypoint bị chấm nhầm sang cơ thể bên cạnh.
+- `train_04.jpg` + người #1 + `left_wrist`: kéo lại keypoint bị chấm nhầm sang người bên cạnh.
+- `train_19.jpg` + người #2 + `right_wrist`: kéo keypoint bị trượt hẳn khỏi vị trí khớp về đúng cổ tay.
 
 **Lỗi đảo trái/phải của tôi xảy ra ở ảnh nào?** Ảnh đó dễ hay khó? Nếu là ảnh dễ,
 bạn nghĩ vì sao mình vẫn sai?
